@@ -34,7 +34,7 @@ const promise1 = new Promise((resolve, reject) => {
   document.addEventListener('click', onClick);
 
   if (wasClicked === false) {
-    timeout();
+    onTimeout();
   }
 });
 
