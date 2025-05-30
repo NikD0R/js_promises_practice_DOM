@@ -4,7 +4,7 @@ const body = document.querySelector('body');
 
 const promise1 = new Promise((resolve, reject) => {
   let wasClicked = false;
-  const timeout = setTimeout(() => {
+  const onTimeout = () => {
     const div = document.createElement('div');
 
     div.setAttribute('data-qa', 'notification');
@@ -12,7 +12,10 @@ const promise1 = new Promise((resolve, reject) => {
     div.textContent = 'First promise was rejected';
     document.removeEventListener('click', onClick);
     reject(body.append(div));
-  }, 3000);
+  };
+
+  const timeout = setTimeout(onTimeout, 3000);
+
   const onClick = (e) => {
     if (e.target) {
       wasClicked = true;
@@ -54,15 +57,13 @@ let leftClick = false;
 let rightClick = false;
 
 const promise3 = new Promise((resolve, reject) => {
-  document.addEventListener('mousedown', (e) => {
+  function handleClick(e) {
     if (e.button === 0) {
       leftClick = true;
     }
 
     if (e.button === 2) {
-      document.addEventListener('contextmenu', (ev) => {
-        ev.preventDefault();
-      });
+      e.preventDefault();
       rightClick = true;
     }
 
@@ -72,11 +73,14 @@ const promise3 = new Promise((resolve, reject) => {
       div.setAttribute('data-qa', 'notification');
       div.classList.add('success');
       div.textContent = 'Third promise was resolved';
-      resolve(body.append(div));
-    } else {
-      reject(new Error('You don`t click left mouse or right mouse'));
+      document.body.appendChild(div);
+
+      resolve();
+      document.removeEventListener('mousedown', handleClick);
     }
-  });
+  }
+
+  document.addEventListener('mousedown', handleClick);
 });
 
 promise1.then(
