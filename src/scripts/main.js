@@ -32,10 +32,6 @@ const promise1 = new Promise((resolve, reject) => {
   };
 
   document.addEventListener('click', onClick);
-
-  if (wasClicked === false) {
-    onTimeout();
-  }
 });
 
 const promise2 = new Promise((resolve, reject) => {
